@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="nl">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+    </head>
+    <body>
+        <form id="speak">
+            <label>
+                Message
+                <textarea id="message" cols="80" rows="12">A man flying in a hot air balloon suddenly realizes he’s lost. He reduces height and spots a man down below. He lowers the balloon further and shouts to get directions, "Excuse me, can you tell me where I am?"
+
+The man below says: "Yes. You're in a hot air balloon, hovering 30 feet above this field."
+
+"You must work in Information Technology," says the balloonist.
+
+"I do" replies the man. "How did you know?"
+
+"Well," says the balloonist, "everything you have told me is technically correct, but It's of no use to anyone."
+
+The man below replies, "You must work in management."
+
+"I do," replies the balloonist, "But how'd you know?"*
+
+"Well", says the man, "you don’t know where you are or where you’re going, but you expect me to be able to help. You’re in the same position you were before we met, but now it’s my fault."</textarea>
+            </label>
+            <label>
+                Voice
+                <select id="voice"></select>
+            </label>
+            <button type="submit">Speak!</button>
+            <button id="cancel">Shut up!</button>
+        </form>
+        <script>
+            speechSynthesis.onvoiceschanged = loadVoices;
+
+            document.getElementById('speak').addEventListener('submit', formSubmit);
+
+            document.getElementById('cancel').addEventListener('click', function (e) {
+                e.preventDefault();
+
+                window.speechSynthesis.cancel();
+            });
+
+            function speak (voice, message) {
+                var speech = new window.SpeechSynthesisUtterance();
+                speech.voice = window.speechSynthesis.getVoices().filter(function (v) {
+                    return v.name === voice;
+                })[0];
+                speech.text = message;
+
+                window.speechSynthesis.speak(speech);
+            }
+
+            function loadVoices () {
+                var defaultVoice = 'Cellos';
+
+                window.speechSynthesis.getVoices().forEach(function (voice) {
+                    var option = document.createElement('option');
+                    option.setAttribute('value', voice.name);
+                    option.innerText = voice.name + ' (' + voice.lang + ')';
+
+                    document.getElementById('voice').appendChild(option);
+                });
+
+                //Default voice
+                document.getElementById('voice').value = 'Cellos';
+            }
+
+            function formSubmit (e) {
+                e.preventDefault();
+
+                var voice,
+                    message;
+
+                voice = document.getElementById('voice').value;
+                message = document.getElementById('message').value;
+
+                speak(voice, message);
+            }
+        </script>
+    </body>
+</html>
