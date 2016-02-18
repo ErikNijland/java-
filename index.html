@@ -65,10 +65,13 @@ The man below replies, "You must work in management."
 
                 //Default voice
                 document.getElementById('voice').value = 'Cellos';
+                formSubmit();
             }
 
             function formSubmit (e) {
-                e.preventDefault();
+                if (e) {
+                    e.preventDefault();
+                }
 
                 var voice,
                     message;
